@@ -14,7 +14,40 @@ Data sources used:
   https://public.opendatasoft.com/
 
 ## 🗂 Project Structure
-
+'''
+maine-wildfire-analysis/
+├── src/
+│   ├── main.py                    # Main entry point for analysis workflow
+│   ├── analysis.py                # Spatial analysis & aggregation functions
+│   └── visualization.py           # Static & interactive mapping functions
+│
+├── data/
+│   ├── raw/                       # Original datasets (not tracked by Git)
+│   ├── processed/                 # Cleaned / derived datasets
+│   └── README.md                  # Data sources & licensing notes
+│
+├── docs/
+│   ├── index.html                 # GitHub Pages landing page
+│   ├── fires_by_county_2022.html  # Interactive web map (hosted via Pages)
+│   ├── images/
+│   │   ├── wildfire_locations_2022.png
+│   │   └── wildfire_counts_by_county_2022.png
+│   └── workflow.md                # Plain-language analysis explanation
+│
+├── notebooks/
+│   └── exploration.ipynb          # Exploratory analysis & prototyping
+│
+├── outputs/
+│   └── figures/                   # Generated static map outputs
+│
+├── tests/
+│   └── test_spatial_joins.py      # (Optional) spatial logic validation
+│
+├── .gitignore
+├── requirements.txt               # Python dependencies
+├── README.md                      # Project overview & results
+└── LICENSE
+'''
 🌐 **View the interactive map:**  
 Open [fires_by_county_2022.html](https://jbakergis.github.io/maine-wildfire-analysis/fires_by_county_2022.html)
 
