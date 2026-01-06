@@ -1,5 +1,5 @@
 """
-Maine Wildfire Analysis (2022)
+Maine Wildfire Analysis
 
 Author: Justin Baker
 Created: September 2023
@@ -137,4 +137,5 @@ interactive_map = county_fires.explore(
 interactive_map.save(OUTPUT_HTML)
 
 print(f"Interactive map saved to: {OUTPUT_HTML}")
+
 
