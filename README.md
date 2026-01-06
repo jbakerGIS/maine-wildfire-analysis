@@ -14,7 +14,7 @@ Data sources used:
   https://public.opendatasoft.com/
 
 ## 🗂 Project Structure
-'''text
+```text
 maine-wildfire-analysis/
 ├── src/
 │   ├── main.py                    # Main entry point for analysis workflow
@@ -47,7 +47,7 @@ maine-wildfire-analysis/
 ├── requirements.txt               # Python dependencies
 ├── README.md                      # Project overview & results
 └── LICENSE
-'''
+```
 🌐 **View the interactive map:**  
 Open [fires_by_county_2022.html](https://jbakergis.github.io/maine-wildfire-analysis/fires_by_county_2022.html)
 
