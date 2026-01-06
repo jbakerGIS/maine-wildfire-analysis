@@ -14,7 +14,7 @@ Data sources used:
   https://public.opendatasoft.com/
 
 ## 🗂 Project Structure
-'''
+'''text
 maine-wildfire-analysis/
 ├── src/
 │   ├── main.py                    # Main entry point for analysis workflow
