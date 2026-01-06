@@ -16,7 +16,7 @@ Data sources used:
 ## 🗂 Project Structure
 
 ➡️ **View the interactive map:**  
-[Open fires_by_county_2022.html](website/fires_by_county_2022.html)
+[Open fires_by_county_2022.html](webpage/fires_by_county_2022.html)
 
 **Map features include:**
 - Pan and zoom
