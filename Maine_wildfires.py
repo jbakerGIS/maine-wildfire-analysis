@@ -1,67 +1,140 @@
-# Created by: Justin Baker
-# Date created: Sep 2023
-# Wildfire data collected from https://data-nifc.opendata.arcgis.com/
-# County boundary data collected from https://public.opendatasoft.com
+"""
+Maine Wildfire Analysis (2022)
+
+Author: Justin Baker
+Created: September 2023
+
+Description:
+    This script visualizes wildfire locations in Maine and summarizes
+    wildfire counts by county using GeoPandas. It produces both static
+    maps and an interactive HTML map.
+"""
+
+from pathlib import Path
 
 import geopandas as gpd
 import pandas as pd
-import contextily as cx
 import matplotlib.pyplot as plt
-from shapely.geometry import shape
-from geopandas.geoseries import *
+import contextily as cx
 
-# -------------------------------- Map wildfire locations -------------------------
 
-# TODO convert hard coded paths to relative paths with OS
+# ------------------------------------------------------------------------------
+# Configuration
+# ------------------------------------------------------------------------------
 
-# Create gpd of wildfires and Maine state boundary json files
-fires = gpd.read_file(
-    "C:/Users/viver/OneDrive/Desktop/Portfolio/Maine/Fires.json").to_crs('EPSG:2802')
+# Coordinate Reference System (Maine State Plane, meters)
+CRS = "EPSG:2802"
 
-states = gpd.read_file(
-    "C:/Users/viver/OneDrive/Desktop/Portfolio/Maine/gz_2010_us_040_00_500k.json"
-    ).to_crs('EPSG:2802')
+# Project directory (update if needed)
+BASE_DIR = Path(r"C:/Users/viver/OneDrive/Desktop/Portfolio/Maine")
 
-maine = states[states['NAME'] == 'Maine']
+# Input data paths
+FIRE_DATA = BASE_DIR / "Fires.json"
+STATE_DATA = BASE_DIR / "gz_2010_us_040_00_500k.json"
+COUNTY_DATA = BASE_DIR / "Counties.geojson"
 
-# Create a map showing each fire location
-ax = maine.plot(column='NAME', figsize=(9,9), alpha=0.5)
-fires.plot(ax=ax, color="red", linewidths=0)
-cx.add_basemap(ax, crs=fires.crs.to_string())
-plt.title('Wildfire locations in Maine in 2022')
-plt.axis('off')
+# Output paths
+OUTPUT_HTML = BASE_DIR / "fires_explore.html"
+
+
+# ------------------------------------------------------------------------------
+# Load Data
+# ------------------------------------------------------------------------------
+
+# Read wildfire point data
+fires = gpd.read_file(FIRE_DATA).to_crs(CRS)
+
+# Read U.S. states and extract Maine boundary
+states = gpd.read_file(STATE_DATA).to_crs(CRS)
+maine = states.loc[states["NAME"] == "Maine"]
+
+
+# ------------------------------------------------------------------------------
+# Static Map: Wildfire Locations
+# ------------------------------------------------------------------------------
+
+fig, ax = plt.subplots(figsize=(9, 9))
+
+# Plot Maine boundary
+maine.plot(ax=ax, color="lightgray", edgecolor="black")
+
+# Plot wildfire points
+fires.plot(ax=ax, color="red", markersize=5)
+
+# Add basemap
+cx.add_basemap(ax, crs=fires.crs)
+
+ax.set_title("Wildfire Locations in Maine (2022)")
+ax.axis("off")
+
 plt.show()
 
-# -------------------- Create an explorable map of wildfires by county ------------------------
 
-# Create gpd of counties geojson file
-counties = gpd.read_file(
-    "C:/Users/viver/OneDrive/Desktop/Portfolio/Maine/Counties.geojson").to_crs('EPSG:2802')
+# ------------------------------------------------------------------------------
+# Wildfires by County
+# ------------------------------------------------------------------------------
 
-# Subset only the name column
-counties = counties[['Name', 'Geometry']]
+# Read county boundaries
+counties = gpd.read_file(COUNTY_DATA).to_crs(CRS)
 
-# Spatial join the fires to the counties gdf
-cf = gpd.sjoin(fires, counties, predicate='within')
+# Keep only relevant columns
+counties = counties[["Name", "geometry"]]
 
-# Calculate the number of fires in each county
-numFires = cf.groupby('Name').size()
+# Spatially join fires to counties
+fires_by_county = gpd.sjoin(
+    fires,
+    counties,
+    predicate="within",
+    how="inner"
+)
 
-# Convert the series to a DataFrame and specify column name
-cf = numFires.to_frame(name='Number of Fires')
+# Count number of fires per county
+fire_counts = (
+    fires_by_county
+    .groupby("Name")
+    .size()
+    .reset_index(name="Number of Fires")
+)
 
-# Merge the dataframes
-countyFires = pd.merge(counties, cf, on='Name')
+# Merge counts back to county geometries
+county_fires = counties.merge(fire_counts, on="Name", how="left")
 
-# Create plot of wildires per county
-countyFires.plot(column='# of fires', legend=True, cmap='Reds')
-plt.title('Maine Wildfires per County in 2022')
-plt.axis('off')
-plt.show
+# Replace NaN values with zero for counties with no fires
+county_fires["Number of Fires"] = county_fires["Number of Fires"].fillna(0)
 
-# Create explorable map of wild fires per county and save the map to html
-m = countyFires.explore()
-outfp = r"C:\Users\viver\OneDrive\Desktop\Portfolio\Maine\fires_explore.html"
-m.save(outfp)
 
+# ------------------------------------------------------------------------------
+# Static Map: Fires per County
+# ------------------------------------------------------------------------------
+
+fig, ax = plt.subplots(figsize=(9, 9))
+
+county_fires.plot(
+    column="Number of Fires",
+    cmap="Reds",
+    legend=True,
+    ax=ax,
+    edgecolor="black"
+)
+
+ax.set_title("Maine Wildfires per County (2022)")
+ax.axis("off")
+
+plt.show()
+
+
+# ------------------------------------------------------------------------------
+# Interactive Map Export
+# ------------------------------------------------------------------------------
+
+# Create interactive map and save to HTML
+interactive_map = county_fires.explore(
+    column="Number of Fires",
+    cmap="Reds",
+    legend=True
+)
+
+interactive_map.save(OUTPUT_HTML)
+
+print(f"Interactive map saved to: {OUTPUT_HTML}")
 
