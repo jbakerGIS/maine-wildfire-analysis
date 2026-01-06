@@ -32,7 +32,7 @@ maine-wildfire-analysis/
 │   └── workflow.md                # Plain-language analysis explanation
 │
 ├── notebooks/
-│   └── exploration.ipynb          # Exploratory analysis & prototyping
+│   └── analysis_notebook.ipynb          # Exploratory analysis & prototyping
 │
 ├── outputs/
 │   └── figures/                   # Generated static map outputs
