@@ -40,9 +40,6 @@ maine-wildfire-analysis/
 ├── outputs/
 │   └── figures/                   # Generated static map outputs
 │
-├── tests/
-│   └── test_spatial_joins.py      # (Optional) spatial logic validation
-│
 ├── .gitignore
 ├── requirements.txt               # Python dependencies
 ├── README.md                      # Project overview & results
