@@ -1,6 +1,6 @@
 # Maine Wildfire Analysis
 
-A GIS-focused analysis of wildfire activity in Maine using open data from national and state sources.  
+An analysis of wildfire activity in Maine using open data from national and state sources.  
 This project demonstrates how to pull, process, and visualize wildfire perimeter and county boundary data using **GeoPandas**, and generate both static figures and interactive outputs.
 
 ## 📌 Overview
