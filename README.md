@@ -29,9 +29,6 @@ maine-wildfire-analysis/
 ├── docs/
 │   ├── index.html                 # GitHub Pages landing page
 │   ├── fires_by_county_2022.html  # Interactive web map (hosted via Pages)
-│   ├── images/
-│   │   ├── wildfire_locations_2022.png
-│   │   └── wildfire_counts_by_county_2022.png
 │   └── workflow.md                # Plain-language analysis explanation
 │
 ├── notebooks/
