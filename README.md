@@ -22,7 +22,7 @@ maine-wildfire-analysis/
 │   └── visualization.py           # Static & interactive mapping functions
 │
 ├── data/
-│   ├── raw/                       # Original datasets (not tracked by Git)
+│   ├── raw/                       # Original datasets
 │   ├── processed/                 # Cleaned / derived datasets
 │   └── README.md                  # Data sources & licensing notes
 │
