@@ -1,10 +1,14 @@
-# Maine Wildfire Mapping
-### September 2023
+# Maine Wildfire Analysis
 
-This project analyzes wildfire data from the state of Maine for the year 2022. 
-It uses the GeoPandas library to create three different outputs to help visualize the data in different ways.
-These have been included in the repo in the outputs folder as .png images.
-To view the explorable map, please visit the following link: https://jbakergis.github.io/Maine-wildfires/.
+A GIS-focused analysis of wildfire activity in Maine using open data from national and state sources.  
+This project demonstrates how to pull, process, and visualize wildfire perimeter and county boundary data using **GeoPandas**, and generate both static figures and interactive outputs.
 
-- Wildfire data collected from https://data-nifc.opendata.arcgis.com/
-- County boundary data collected from https://public.opendatasoft.com
+## 📌 Overview
+
+Wildfires are an important environmental and land management issue in Maine, a heavily forested state with hundreds of fire events annually. This repository provides scripts and outputs to explore wildfire patterns, map fire perimeters, and generate geospatial visualizations.
+
+Data sources used:
+- Wildfire perimeter data from **NIFC ArcGIS Open Data**. :contentReference[oaicite:1]{index=1}
+- County boundaries from **OpenDataSoft**. :contentReference[oaicite:2]{index=2}
+
+## 🗂 Project Structure
