@@ -14,3 +14,11 @@ Data sources used:
   https://public.opendatasoft.com/
 
 ## 🗂 Project Structure
+
+➡️ **View the interactive map:**  
+[Open fires_by_county_2022.html](webpage/fires_by_county_2022.html)
+
+**Map features include:**
+- Pan and zoom
+- County-level wildfire counts
+- Hover-based inspection
