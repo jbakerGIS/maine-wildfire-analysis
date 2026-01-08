@@ -185,7 +185,7 @@ def plot_wildfire_locations(
     ax.set_title("Wildfire Locations in Maine (2022)")
     ax.axis("off")
 
-    plt.savefig(output_path)
+    plt.savefig(output_path, dpi=300)
 
     print(f"Wildfire locations map saved to: {output_path}")
 
