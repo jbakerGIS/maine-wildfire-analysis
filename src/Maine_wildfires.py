@@ -30,8 +30,8 @@ FIRE_DATA = Path("./data/raw/Fires.json")
 STATE_DATA = Path("./data/raw/gz_2010_us_040_00_500k.json")
 COUNTY_DATA = Path("./data/raw/Counties.geojson")
 
-PROCESSED_MAINE_BOUNDARY = Path("../data/processed/maine_boundary.gpkg")
-PROCESSED_COUNTIES = Path("../data/processed/maine_counties.gpkg")
+PROCESSED_MAINE_BOUNDARY = Path("./data/processed/maine_boundary.gpkg")
+PROCESSED_COUNTIES = Path("./data/processed/maine_counties.gpkg")
 OUTPUT_HTML = Path("./docs/fires_by_county_2022.html")
 
 # ------------------------------------------------------------------------------
