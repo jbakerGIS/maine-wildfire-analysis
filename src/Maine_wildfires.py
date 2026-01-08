@@ -30,8 +30,8 @@ FIRE_DATA = Path("./data/raw/Fires.json")
 STATE_DATA = Path("./data/raw/gz_2010_us_040_00_500k.json")
 COUNTY_DATA = Path("./data/raw/Counties.geojson")
 
-PROCESSED_MAINE_BOUNDARY = Path("./data/maine_boundary.gpkg")
-PROCESSED_COUNTIES = Path("./data/maine_counties.gpkg")
+PROCESSED_MAINE_BOUNDARY = Path("../data/processed/maine_boundary.gpkg")
+PROCESSED_COUNTIES = Path("../data/processed/maine_counties.gpkg")
 OUTPUT_HTML = Path("./outputs/fires_explore.html")
 
 # ------------------------------------------------------------------------------
@@ -100,7 +100,7 @@ def load_counties(
     '''
 
     counties = gpd.read_file(path).to_crs(crs)
-    counties = counties[["Name", "geometry"]]
+    counties = counties[["name", "geometry"]]
 
     if export:
         export_geodataframe(
@@ -134,14 +134,14 @@ def calculate_fires_by_county(
 
     fire_counts = (
         joined
-        .groupby("Name")
+        .groupby("name")
         .size()
         .reset_index(name="Number of Fires")
     )
 
     county_fires = counties.merge(
         fire_counts,
-        on="Name",
+        on="name",
         how="left"
     )
 
