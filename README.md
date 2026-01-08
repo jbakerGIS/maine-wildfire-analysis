@@ -67,7 +67,9 @@ maine-wildfire-analysis/
 └── LICENSE
 ```
 ## 🖼️ Output Maps
+<img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/9983127c-95b2-4f77-b629-206c1105489a" />
 
+<img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/1416f92f-c7b7-4888-b607-b843e5dcdca0" />
 
 🌐 **View the interactive map:**  
 Open [fires_by_county_2022.html](https://jbakergis.github.io/maine-wildfire-analysis/fires_by_county_2022.html)
@@ -92,7 +94,9 @@ It is recommended to use a virtual environment.
 
 ```bash
 python -m venv venv
+
 source venv/bin/activate   # macOS/Linux
+
 venv\Scripts\activate      # Windows
 ```
 
