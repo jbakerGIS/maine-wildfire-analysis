@@ -32,7 +32,9 @@ COUNTY_DATA = Path("./data/raw/Counties.geojson")
 
 PROCESSED_MAINE_BOUNDARY = Path("./data/processed/maine_boundary.gpkg")
 PROCESSED_COUNTIES = Path("./data/processed/maine_counties.gpkg")
-OUTPUT_HTML = Path("./docs/fires_by_county_2022.html")
+WILDFIRES_BY_COUNTY_FIGURE = Path("./outputs/figures/wildfires_by_county_2022.png")
+WILDFIRE_LOCATIONS_FIGURE = Path("./outputs/figures/wildfire_locations_2022.png")
+OUTPUT_HTML = Path("./docs/wildfires_by_county_2022.html")
 
 # ------------------------------------------------------------------------------
 # Export Function
@@ -159,7 +161,8 @@ def calculate_fires_by_county(
 
 def plot_wildfire_locations(
     maine: gpd.GeoDataFrame,
-    fires: gpd.GeoDataFrame
+    fires: gpd.GeoDataFrame,
+    output_path: Path
 ) -> None:
     '''Create a static map of wildfire locations in Maine.'''
     
@@ -182,11 +185,14 @@ def plot_wildfire_locations(
     ax.set_title("Wildfire Locations in Maine (2022)")
     ax.axis("off")
 
-    plt.show()
+    plt.savefig(output_path)
+
+    print(f"Wildfire locations map saved to: {output_path}")
 
 
 def plot_fires_by_county(
-    county_fires: gpd.GeoDataFrame
+    county_fires: gpd.GeoDataFrame,
+    output_path: Path
 ) -> None:
     '''Create a choropleth map showing wildfire counts per county.'''
 
@@ -203,7 +209,9 @@ def plot_fires_by_county(
     ax.set_title("Maine Wildfires per County (2022)")
     ax.axis("off")
 
-    plt.show()
+    plt.savefig(output_path)
+
+    print(f"Fires by county map saved to: {output_path}")
 
 
 def export_interactive_map(
@@ -233,11 +241,11 @@ def main() -> None:
     maine = load_maine_boundary(STATE_DATA, CRS)
     counties = load_counties(COUNTY_DATA, CRS)
 
-    plot_wildfire_locations(maine, fires)
+    plot_wildfire_locations(maine, fires, WILDFIRE_LOCATIONS_FIGURE)
 
     county_fires = calculate_fires_by_county(fires, counties)
 
-    plot_fires_by_county(county_fires)
+    plot_fires_by_county(county_fires, WILDFIRES_BY_COUNTY_FIGURE)
     export_interactive_map(county_fires, OUTPUT_HTML)
 
 
