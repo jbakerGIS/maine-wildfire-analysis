@@ -209,7 +209,7 @@ def plot_fires_by_county(
     ax.set_title("Maine Wildfires per County (2022)")
     ax.axis("off")
 
-    plt.savefig(output_path)
+    plt.savefig(output_path, dpi=300)
 
     print(f"Fires by county map saved to: {output_path}")
 
