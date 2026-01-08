@@ -16,7 +16,6 @@ Description:
 from pathlib import Path
 
 import geopandas as gpd
-import pandas as pd
 import matplotlib.pyplot as plt
 import contextily as cx
 
@@ -99,7 +98,7 @@ def load_counties(
     Load Maine county boundaries and optionally export
     the processed dataset.
     '''
-    
+
     counties = gpd.read_file(path).to_crs(crs)
     counties = counties[["Name", "geometry"]]
 
