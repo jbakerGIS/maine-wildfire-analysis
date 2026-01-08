@@ -32,7 +32,7 @@ COUNTY_DATA = Path("./data/raw/Counties.geojson")
 
 PROCESSED_MAINE_BOUNDARY = Path("../data/processed/maine_boundary.gpkg")
 PROCESSED_COUNTIES = Path("../data/processed/maine_counties.gpkg")
-OUTPUT_HTML = Path("./outputs/fires_explore.html")
+OUTPUT_HTML = Path("./docs/fires_by_county_2022.html")
 
 # ------------------------------------------------------------------------------
 # Export Function
