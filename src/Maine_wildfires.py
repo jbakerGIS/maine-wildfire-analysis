@@ -1,13 +1,16 @@
 """
+--------------------------------------------------------------------------------
 Maine Wildfire Analysis
-
 Author: Justin Baker
-Created: September 2023
+Date: September 2023
+--------------------------------------------------------------------------------
 
 Description:
     This script visualizes wildfire locations in Maine and summarizes
     wildfire counts by county using GeoPandas. It produces both static
     maps and an interactive HTML map.
+
+--------------------------------------------------------------------------------
 """
 
 from pathlib import Path
@@ -28,32 +31,86 @@ FIRE_DATA = Path("./data/raw/Fires.json")
 STATE_DATA = Path("./data/raw/gz_2010_us_040_00_500k.json")
 COUNTY_DATA = Path("./data/raw/Counties.geojson")
 
+PROCESSED_MAINE_BOUNDARY = Path("./data/maine_boundary.gpkg")
+PROCESSED_COUNTIES = Path("./data/maine_counties.gpkg")
 OUTPUT_HTML = Path("./outputs/fires_explore.html")
+
+# ------------------------------------------------------------------------------
+# Export Function
+# ------------------------------------------------------------------------------
+
+def export_geodataframe(
+    gdf: gpd.GeoDataFrame,
+    output_path: Path,
+    layer_name: str | None = None
+) -> None:
+    '''
+    Export a GeoDataFrame to disk, creating parent directories if needed.
+    '''
+    
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    if output_path.suffix == ".gpkg":
+        gdf.to_file(output_path, layer=layer_name, driver="GPKG")
+    else:
+        gdf.to_file(output_path)
+
+    print(f"Exported: {output_path}")
+
+
 # ------------------------------------------------------------------------------
 # Data Loading Functions
 # ------------------------------------------------------------------------------
 
 def load_wildfires(path: Path, crs: str) -> gpd.GeoDataFrame:
-    """
-    Load wildfire point data and project to the target CRS.
-    """
+    '''Load wildfire point data and project to the target CRS.'''
+    
     return gpd.read_file(path).to_crs(crs)
 
 
-def load_maine_boundary(path: Path, crs: str) -> gpd.GeoDataFrame:
-    """
-    Load U.S. state boundaries and extract Maine only.
-    """
+def load_maine_boundary(
+        path: Path,
+        crs: str,
+        export: bool = True
+) -> gpd.GeoDataFrame:
+    '''
+    Load U.S. state boundaries and extract Maine, and optionally export
+    the processed boundary.
+    '''
+
     states = gpd.read_file(path).to_crs(crs)
+    maine = states.loc[states["NAME"] == "Maine"]
+
+    if export:
+        export_geodataframe(
+            maine,
+            PROCESSED_MAINE_BOUNDARY,
+            layer_name="maine_boundary"
+        )
     return states.loc[states["NAME"] == "Maine"]
 
 
-def load_counties(path: Path, crs: str) -> gpd.GeoDataFrame:
-    """
-    Load Maine county boundaries.
-    """
+def load_counties(
+    path: Path,
+    crs: str,
+    export: bool = True
+) -> gpd.GeoDataFrame:
+    '''
+    Load Maine county boundaries and optionally export
+    the processed dataset.
+    '''
+    
     counties = gpd.read_file(path).to_crs(crs)
-    return counties[["Name", "geometry"]]
+    counties = counties[["Name", "geometry"]]
+
+    if export:
+        export_geodataframe(
+            counties,
+            PROCESSED_COUNTIES,
+            layer_name="maine_counties"
+        )
+
+    return counties
 
 
 # ------------------------------------------------------------------------------
@@ -64,10 +121,11 @@ def calculate_fires_by_county(
     fires: gpd.GeoDataFrame,
     counties: gpd.GeoDataFrame
 ) -> gpd.GeoDataFrame:
-    """
+    '''
     Spatially join wildfire points to counties and calculate
     fire counts per county.
-    """
+    '''
+    
     joined = gpd.sjoin(
         fires,
         counties,
@@ -104,9 +162,8 @@ def plot_wildfire_locations(
     maine: gpd.GeoDataFrame,
     fires: gpd.GeoDataFrame
 ) -> None:
-    """
-    Create a static map of wildfire locations in Maine.
-    """
+    '''Create a static map of wildfire locations in Maine.'''
+    
     fig, ax = plt.subplots(figsize=(9, 9))
 
     maine.plot(
@@ -132,9 +189,8 @@ def plot_wildfire_locations(
 def plot_fires_by_county(
     county_fires: gpd.GeoDataFrame
 ) -> None:
-    """
-    Create a choropleth map showing wildfire counts per county.
-    """
+    '''Create a choropleth map showing wildfire counts per county.'''
+
     fig, ax = plt.subplots(figsize=(9, 9))
 
     county_fires.plot(
@@ -155,9 +211,9 @@ def export_interactive_map(
     county_fires: gpd.GeoDataFrame,
     output_path: Path
 ) -> None:
-    """
-    Export an interactive web map of wildfires per county.
-    """
+    '''Export an interactive web map of wildfires per county.'''
+    
+
     m = county_fires.explore(
         column="Number of Fires",
         cmap="Reds",
@@ -173,9 +229,7 @@ def export_interactive_map(
 # ------------------------------------------------------------------------------
 
 def main() -> None:
-    """
-    Execute the full GIS analysis workflow.
-    """
+    '''Execute the full GIS analysis workflow.'''
     fires = load_wildfires(FIRE_DATA, CRS)
     maine = load_maine_boundary(STATE_DATA, CRS)
     counties = load_counties(COUNTY_DATA, CRS)
